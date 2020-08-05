@@ -2,60 +2,52 @@
 #include <string>
 #include <vector>
  
-int count;
- 
 class PhoneBook {
 public:
 	struct Contact {
-		std::string phone_number, name, adress;
-		int id;
-		Contact(std::string phone_number, std::string name, std::string adress, int id) {
-			this->phone_number = phone_number;
-			this->name = name;
-			this->adress = adress;
-			this->id = id; 
-		}
+		std::string phoneNumber_, name_, adress_;
+		int id_;
+		Contact(std::string phoneNumber, std::string name, std::string adress, int id) : phoneNumber_(phoneNumber), name_(name), adress_(adress), id_(id) {} 
 	};
-	std::vector<Contact> contacts;
-	void PrintContact(Contact& current_contact) {
-		std::cout << current_contact.phone_number << ' ' << current_contact.name << ' ' << current_contact.adress << ' ' << current_contact.id << "\n";
+	void PrintContact(const Contact& currentContact) const {
+		std::cout << currentContact.phoneNumber_ << ' ' << currentContact.name_ << ' ' << currentContact.adress_ << ' ' << currentContact.id_ << "\n";
 	}
-	bool Check(std::string number, std::string sub_number) {
+	bool Check(const std::string number, const std::string sub_number) {
 		return (sub_number.length() <= number.length() && number.substr((int)sub_number.length()) == sub_number);
 	}
 	void AddNew() {
-		std::string new_number, new_name, new_adress;
+		std::string newNumber, newName, newAdress;
 		std::cout << "Enter his phone number:\n";
-		std::cin >> new_number;
+		std::cin >> newNumber;
 		std::cout << "Enter his name:\n";
-		std::cin >> new_name;
+		std::cin >> newName;
 		std::cout << "Enter his adress:\n";
-		std::cin >> new_adress;
-		int was_id = 0;
-		for (auto& current_contact : contacts) {
-			if (current_contact.name == new_name || current_contact.phone_number == new_number) {
-				was_id = current_contact.id;
+		std::cin >> newAdress;
+		int wasId = 0;
+		for (auto& currentContact : contacts_) {
+			if (currentContact.name_ == newName || currentContact.phoneNumber_ == newNumber) {
+				wasId = currentContact.id_;
 				break;
 			}
 		}
-		if (was_id != 0) {
-			std::cout << "There is such contact with Id " << was_id << "\n"; 
+		if (wasId != 0) {
+			std::cout << "There is such contact with ID " << wasId << "\n"; 
 		}
 		else {
-			contacts.push_back({new_number, new_name, new_adress, ++count});
+			contacts_.push_back({newNumber, newName, newAdress, ++count_});
 		}
 	}
 	void FindByName() {
- 
+		
 	}
 	void FindByPhoneNumber() {
 		std::cout << "Enter what phone number to find:\n";
-		std::string number_for_find;
-		std::cin >> number_for_find;
+		std::string numberForFind;
+		std::cin >> numberForFind;
 		std::vector<Contact> suitable;
-		for (auto& current_contact : contacts) {
-			if (Check(current_contact.phone_number, number_for_find)) {
-				suitable.push_back(current_contact);
+		for (auto& currentContact : contacts_) {
+			if (Check(currentContact.phoneNumber_, numberForFind)) {
+				suitable.push_back(currentContact);
 			}
 		}
 		if (suitable.empty()) {
@@ -68,15 +60,47 @@ public:
 		}
 	}
 	void FindById() {
- 
+		std::cout << "What ID do you want to find?\n";
+		int findID;
+		bool was = false;
+		std::cin >> findID;
+		for (auto& currentContact : contacts_) {
+			if (currentContact.id)_ == findID) {
+				PrintContact(currentContact);
+				was = true;
+				break;
+			}
+		}
+		if (!was) {
+			std::cout << "There is no such ID\n";
+		}
 	}
 	void DeleteById() {
- 
+		std::cout << "What ID do you want to delete?\n";
+		int delID, need = -1;
+		std::cin >> delID;
+		for (int number = 0; number < contacts_.size(); number++) {
+			if (contacts[number].id_ == delID) {
+				need = number;
+				break;
+			}
+		}
+		if (need == -1) {
+			std::cout << "There is no such ID\n";
+		}
+		else {
+			contacts_.erase(contacts_.begin() + need);
+		}
 	}
 	void ShowContacts() {
- 
+		for (auto& currentContact : contacts_) {
+			PrintContact(currentContact);
+		}
 	}
-} phonebook;
+private:
+    std::vector<Contact> contacts_;
+    int count_ = 0;
+};
  
 int ChooseAction() {
 	std::cout << "Choose action:\n";
@@ -92,8 +116,9 @@ int ChooseAction() {
 }
  
 void Solve() {
+    PhoneBook phonebook;
 	int action = ChooseAction();
-	std::cout << "DEBUG : " << action << std::endl;
+//	std::cout << "DEBUG : " << action << std::endl;
 	switch (action) {
 		case 1: {
 			phonebook.AddNew();
