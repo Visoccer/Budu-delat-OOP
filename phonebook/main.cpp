@@ -65,7 +65,7 @@ public:
 		bool was = false;
 		std::cin >> findID;
 		for (auto& currentContact : contacts_) {
-			if (currentContact.id)_ == findID) {
+			if (currentContact.id_ == findID) {
 				PrintContact(currentContact);
 				was = true;
 				break;
@@ -80,7 +80,7 @@ public:
 		int delID, need = -1;
 		std::cin >> delID;
 		for (int number = 0; number < contacts_.size(); number++) {
-			if (contacts[number].id_ == delID) {
+			if (contacts_[number].id_ == delID) {
 				need = number;
 				break;
 			}
