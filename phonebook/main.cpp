@@ -12,7 +12,7 @@ public:
     Number(std::string data) : data_(data) {}
     Number() {}
     
-    std::string GetData() {
+    const std::string GetData() const {
         return data_;
     }
 private:
@@ -24,7 +24,7 @@ public:
     Name(std::vector<std::string> data) : data_(data) {}
     Name() {}
     
-    std::vector<std::string> GetData() {
+    const std::vector<std::string> GetData() const {
         return data_;
     }
 private:
@@ -36,7 +36,7 @@ public:
     Adress(std::string data) : data_(data) {}
     Adress() {}
 
-    std::string GetData() {
+    const std::string GetData() const {
         return data_;
     }
 private:
@@ -73,13 +73,13 @@ public:
     Contact() {}
     
     //getters
-    std::string GetNumber() {
+    const std::string GetNumber() const {
         return number_.GetData();
     }
-    std::vector<std::string> GetName() {
+    const std::vector<std::string> GetName() const {
         return name_.GetData();
     }
-    std::string GetAdress() {
+    const std::string GetAdress() const {
         return adress_.GetData();
     }
     
