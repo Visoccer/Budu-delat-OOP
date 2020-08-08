@@ -11,8 +11,12 @@ class Number {
 public:
     Number(std::string data) : data_(data) {}
     Number() {}
+    
     const std::string GetData() const {
         return data_;
+    }
+    void SetData(const std::string& data) {
+        data_ = data;
     }
 private:
     std::string data_;
@@ -26,6 +30,24 @@ public:
     const std::string GetData() const {
         return data_;
     }
+    void SetData(const std::string& data) {
+        data_ = data;
+    }
+private:
+    std::string data_;
+};
+ 
+class Adress {
+public:
+    Adress(std::string data) : data_(data) {}
+    Adress() {}
+
+    const std::string GetData() const {
+        return data_;
+    }
+    void SetData(const std::string& data) {
+        data_ = data;
+    }
 private:
     std::string data_;
 };
@@ -38,20 +60,11 @@ public:
     const std::vector<std::string> GetData() const {
         return data_;
     }
-private:
-    std::vector<std::string> data_;
-};
- 
-class Adress {
-public:
-    Adress(std::string data) : data_(data) {}
-    Adress() {}
-
-    const std::string GetData() const {
-        return data_;
+    void SetData(const std::vector<std::string>& data) {
+        data_ = data;
     }
 private:
-    std::string data_;
+    std::vector<std::string> data_;
 };
 
 std::vector<std::string> ConvertToVector(const std::string& words) {
@@ -95,16 +108,16 @@ public:
         return nameBuffer_.GetData();
     }
     
-    void SetNumber(const std::string number) {
-        number_ = number;
+    void SetNumber(const std::string& number) {
+        number_.SetData(number);
     }
-    void SetName(const std::string name) {
+    void SetName(const std::string& name) {
         std::vector<std::string> convertedName = ConvertToVector(name);
-        name_ = name;
-        nameBuffer_ = convertedName;
+        name_.SetData(name);
+        nameBuffer_.SetData(convertedName);
     }
-    void SetAdress(const std::string adress) {
-        adress_ = adress;
+    void SetAdress(const std::string& adress) {
+        adress_.SetData(adress);
     }
 
 private:
@@ -116,9 +129,6 @@ private:
  
 class PhoneBook {
 public:
-    
-//  getters
-    
     const std::unordered_map<int, Contact> GetContacts() const {
         return contacts_;
     }
@@ -180,7 +190,7 @@ public:
         contacts_.erase(contacts_.find(id));
     }
     
-    std::vector<Contact> FindAdress(const std::string& adress) {
+    std::vector<Contact> FindAdress(std::string& adress) {
         std::vector<Contact> finded;
         for (auto& iteration : contacts_) {
             auto& contact = iteration.second;
@@ -198,21 +208,30 @@ private:
 };
 
 void PrintContact(const Contact& contact) {
-    std::cout << contact.GetNumber() << ' ' << contact.GetName() << ' ' << contact.GetAdress() << ' ';
+    std::cout << contact.GetNumber() << ' ' << contact.GetName() << ' ' << contact.GetAdress() << "\n";
 }
 
 void ShowContacts(PhoneBook& phoneBook) {
     std::unordered_map<int, Contact> contacts = phoneBook.GetContacts();
     for (auto& iteration : contacts) {
         PrintContact(iteration.second);
-        std::cout << "ID : " << iteration.first << std::endl;
+        std::cout << "ID : " << iteration.first << "\n";
+    }
+}
+
+void ShowAdresses(PhoneBook& phoneBook, std::string& adress) {
+    std::vector<Contact> suitable = phoneBook.FindAdress(adress);
+    for (auto& contact : suitable) {
+        PrintContact(contact);
     }
 }
 
 void Solve() {
     PhoneBook phoneBook;
-    phoneBook.AddContact("+228", "Sokarev Ivan", "ULITSA BSUIR");
+    /*phoneBook.AddContact("+228", "Sokarev Ivan", "ULITSA BSUIR");
     ShowContacts(phoneBook);
+    std::string adress = "ULITSA";
+    ShowAdresses(phoneBook, adress);*/
 }
  
 int main() {
