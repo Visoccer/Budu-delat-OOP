@@ -11,7 +11,6 @@ class Number {
 public:
     Number(std::string data) : data_(data) {}
     Number() {}
-    
     const std::string GetData() const {
         return data_;
     }
@@ -21,8 +20,20 @@ private:
  
 class Name {
 public:
-    Name(std::vector<std::string> data) : data_(data) {}
+    Name(std::string data) : data_(data) {}
     Name() {}
+    
+    const std::string GetData() const {
+        return data_;
+    }
+private:
+    std::string data_;
+};
+
+class NameBuffer {
+public:
+    NameBuffer(std::vector<std::string> data) : data_(data) {}
+    NameBuffer() {}
     
     const std::vector<std::string> GetData() const {
         return data_;
@@ -43,10 +54,10 @@ private:
     std::string data_;
 };
 
-std::vector<std::string> ConvertToVector(const std::string words) {
+std::vector<std::string> ConvertToVector(const std::string& words) {
     std::vector<std::string> convertedVector;
     std::string currentWord;
-    for (int i = 0; i < words.size(); i++) {
+    for (size_t i = 0; i < words.size(); i++) {
         char symbol = words[i];
         if (symbol >= 'A' && symbol <= 'Z') {
             symbol = char('a' + int(symbol - 'A'));
@@ -68,28 +79,29 @@ std::vector<std::string> ConvertToVector(const std::string words) {
 
 class Contact {
 public:	
-    Contact(Number number, Name name, Adress adress) : 
-        number_(number), name_(name), adress_(adress) {}
+    Contact(Number number, Name name, Adress adress, NameBuffer nameBuffer) : 
+        number_(number), name_(name), adress_(adress), nameBuffer_(nameBuffer) {}
     Contact() {}
-    
-    //getters
     const std::string GetNumber() const {
         return number_.GetData();
     }
-    const std::vector<std::string> GetName() const {
+    const std::string GetName() const {
         return name_.GetData();
     }
     const std::string GetAdress() const {
         return adress_.GetData();
     }
+    const std::vector<std::string> GetNameBuffer() const {
+        return nameBuffer_.GetData();
+    }
     
-    //setters
     void SetNumber(const std::string number) {
         number_ = number;
     }
     void SetName(const std::string name) {
         std::vector<std::string> convertedName = ConvertToVector(name);
-        name_ = convertedName;
+        name_ = name;
+        nameBuffer_ = convertedName;
     }
     void SetAdress(const std::string adress) {
         adress_ = adress;
@@ -97,52 +109,60 @@ public:
 
 private:
     Number number_;
-    Name name_;
     Adress adress_;
+    Name name_;
+    NameBuffer nameBuffer_;
 };
  
 class PhoneBook {
 public:
-    int Check(const std::string number, const std::vector<std::string> name) {
+    
+//  getters
+    
+    const std::unordered_map<int, Contact> GetContacts() const {
+        return contacts_;
+    }
+      
+    int Check(const std::string& number, const std::vector<std::string>& name) {
         for (auto& iteration : contacts_) {
             auto& contact = iteration.second;
-            if (contact.GetNumber() == number || contact.GetName() == name) {
+            if (contact.GetNumber() == number || contact.GetNameBuffer() == name) {
                 return iteration.first;
             }
         }
         return -1;
     }
     
-    bool CheckAdress(const std::string subAdress, const std::string adress) {
+    bool CheckAdress(const std::string& subAdress, const std::string& adress) {
         int len = subAdress.length();
         return (len <= adress.length() && subAdress == adress.substr(0, len));
     }
     
-    int AddContact(const std::string number, const std::string name, const std::string adress) {
+    int AddContact(const std::string& number, const std::string& name, const std::string& adress) {
         std::vector<std::string> convertedName = ConvertToVector(name);
         int check = Check(number, convertedName);
         if (check != -1) {
             return check;
         }
         else {
-            Contact newContact = {number, convertedName, adress};
-            contacts_[++count_] = {number, convertedName, adress};
+            Contact newContact = {number, name, adress, convertedName};
+            contacts_[++count_] = {number, name, adress, convertedName};
             return 0;
         }
     }
     
-    int FindName(const std::string name) {
+    int FindName(const std::string& name) {
         std::vector<std::string> convertedName = ConvertToVector(name);
         for (auto& iteration : contacts_) {
             auto& contact = iteration.second;
-            if (contact.GetName() == convertedName) {
+            if (contact.GetNameBuffer() == convertedName) {
                 return iteration.first;
             }
         }
         return -1;
     }
     
-    int FindNumber(const std::string number) {
+    int FindNumber(const std::string& number) {
         for (auto& iteration : contacts_) {
             auto& contact = iteration.second;
             if (contact.GetNumber() == number) {
@@ -160,7 +180,7 @@ public:
         contacts_.erase(contacts_.find(id));
     }
     
-    std::vector<Contact> FindAdress(const std::string adress) {
+    std::vector<Contact> FindAdress(const std::string& adress) {
         std::vector<Contact> finded;
         for (auto& iteration : contacts_) {
             auto& contact = iteration.second;
@@ -176,9 +196,23 @@ private:
     std::unordered_map<int, Contact> contacts_;
     int count_ = 0;
 };
- 
+
+void PrintContact(const Contact& contact) {
+    std::cout << contact.GetNumber() << ' ' << contact.GetName() << ' ' << contact.GetAdress() << ' ';
+}
+
+void ShowContacts(PhoneBook& phoneBook) {
+    std::unordered_map<int, Contact> contacts = phoneBook.GetContacts();
+    for (auto& iteration : contacts) {
+        PrintContact(iteration.second);
+        std::cout << "ID : " << iteration.first << std::endl;
+    }
+}
+
 void Solve() {
-    PhoneBook phonebook;
+    PhoneBook phoneBook;
+    phoneBook.AddContact("+228", "Sokarev Ivan", "ULITSA BSUIR");
+    ShowContacts(phoneBook);
 }
  
 int main() {
