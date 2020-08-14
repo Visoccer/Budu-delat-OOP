@@ -2,7 +2,6 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
-#include <map>
 #include <algorithm>
 
 //using namespace std;
@@ -12,7 +11,7 @@ public:
     Number(std::string data) : data_(data) {}
     Number() {}
     
-    const std::string GetData() const {
+    const std::string& GetData() const {
         return data_;
     }
     void SetData(const std::string& data) {
@@ -27,7 +26,7 @@ public:
     Name(std::string data) : data_(data) {}
     Name() {}
     
-    const std::string GetData() const {
+    const std::string& GetData() const {
         return data_;
     }
     void SetData(const std::string& data) {
@@ -42,7 +41,7 @@ public:
     Adress(std::string data) : data_(data) {}
     Adress() {}
 
-    const std::string GetData() const {
+    const std::string& GetData() const {
         return data_;
     }
     void SetData(const std::string& data) {
@@ -57,7 +56,7 @@ public:
     NameBuffer(std::vector<std::string> data) : data_(data) {}
     NameBuffer() {}
     
-    const std::vector<std::string> GetData() const {
+    const std::vector<std::string>& GetData() const {
         return data_;
     }
     void SetData(const std::vector<std::string>& data) {
@@ -92,19 +91,19 @@ std::vector<std::string> ConvertToVector(const std::string& words) {
 
 class Contact {
 public:	
-    Contact(Number number, Name name, Adress adress, NameBuffer nameBuffer) : 
-        number_(number), name_(name), adress_(adress), nameBuffer_(nameBuffer) {}
+    Contact(Number number, Name name, Adress adress, NameBuffer nameBuffer)  
+        : number_(number), name_(name), adress_(adress), nameBuffer_(nameBuffer) {}
     Contact() {}
-    const std::string GetNumber() const {
+    const std::string& GetNumber() const {
         return number_.GetData();
     }
-    const std::string GetName() const {
+    const std::string& GetName() const {
         return name_.GetData();
     }
-    const std::string GetAdress() const {
+    const std::string& GetAdress() const {
         return adress_.GetData();
     }
-    const std::vector<std::string> GetNameBuffer() const {
+    const std::vector<std::string>& GetNameBuffer() const {
         return nameBuffer_.GetData();
     }
     
@@ -129,7 +128,7 @@ private:
  
 class PhoneBook {
 public:
-    const std::unordered_map<int, Contact> GetContacts() const {
+    const std::unordered_map<int, Contact>& GetContacts() const {
         return contacts_;
     }
       
