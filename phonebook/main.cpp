@@ -77,8 +77,7 @@ std::vector<std::string> ConvertToVector(const std::string& words) {
         if (symbol != ' ') {
             convertedVector.push_back(currentWord);
             currentWord.clear();
-        }
-        else {
+        } else {
             currentWord.push_back(symbol);
         }
     }
@@ -151,12 +150,10 @@ public:
         std::vector<std::string> convertedName = ConvertToVector(name);
         int check = Check(number, convertedName);
         if (check != -1) {
-            return check;
-        }
-        else {
-            Contact newContact = {number, name, adress, convertedName};
+            return -check;
+        } else {
             contacts_[++count_] = {number, name, adress, convertedName};
-            return 0;
+            return count_;
         }
     }
     
@@ -181,8 +178,12 @@ public:
         return -1;
     }
     
-    Contact FindID(const int id) {
-        return contacts_[id];
+    Contact* FindID(const int id) {
+        if (contacts_.find(id) != contacts_.end()) {
+            return &contacts_[id];
+        } else {
+            return nullptr;
+        }
     }
     
     void DeleteID(const int id) {
@@ -207,7 +208,7 @@ private:
 };
 
 void PrintContact(const Contact& contact) {
-    std::cout << contact.GetNumber() << ' ' << contact.GetName() << ' ' << contact.GetAdress() << "\n";
+    std::cout << contact.GetNumber() << ' ' << contact.GetName() << ' ' << contact.GetAdress() << ", ";
 }
 
 void ShowContacts(PhoneBook& phoneBook) {
@@ -227,10 +228,12 @@ void ShowAdresses(PhoneBook& phoneBook, std::string& adress) {
 
 void Solve() {
     PhoneBook phoneBook;
-    /*phoneBook.AddContact("+228", "Sokarev Ivan", "ULITSA BSUIR");
+    phoneBook.AddContact("+228", "Sokarev Ivan", "ULITSA BSUIR");
     ShowContacts(phoneBook);
-    std::string adress = "ULITSA";
+    /*std::string adress = "ULITSA";
     ShowAdresses(phoneBook, adress);*/
+    phoneBook.FindID(1)->SetName("Stas Bokun GOD");
+    ShowContacts(phoneBook);
 }
  
 int main() {
